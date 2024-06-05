@@ -1,0 +1,33 @@
+{
+  "name": "btb-backend",
+  "version": "1.0.0",
+  "description": "API para venda de ingressos de cinema",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gaaaybe/BTB-backend.git"
+  },
+  "keywords": [
+    "cinema"
+  ],
+  "author": "Gabriel Menezes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gaaaybe/BTB-backend/issues"
+  },
+  "homepage": "https://github.com/Gaaaybe/BTB-backend#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "eslint": "^9.4.0",
+    "globals": "^15.3.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.3"
+  }
+}
