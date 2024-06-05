@@ -1,6 +1,6 @@
 import express from 'express';
 //import conectarNaDB from './config/dbconnect.js';
-//import routes from './routes/index.js';
+import routes from './routes/index.js';
 
 //const conexao = await conectarNaDB();
 //conexao.on("error", (erro) => { console.log("Erro ao conectar no banco de dados: " + erro)});
@@ -10,6 +10,6 @@ import express from 'express';
 // });
 
 const app = express();
-//routes(app);
+routes(app);
 
 export default app;
