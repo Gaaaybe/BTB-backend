@@ -5,4 +5,8 @@ const routes = (app) => {
     app.use(express.json());
 };
 
+(async ()=>{
+    console.log('Funciona?');
+})();
+
 export default routes;
