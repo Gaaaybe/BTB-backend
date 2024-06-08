@@ -1,5 +1,4 @@
-import _sequelize from 'sequelize';
-const { Model, Sequelize } = _sequelize;
+import { Model } from 'sequelize';
 
 export default class sala extends Model {
   static init(sequelize, DataTypes) {
