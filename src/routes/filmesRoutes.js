@@ -5,3 +5,4 @@ const routes = express.Router();
 
 routes.get('/filmes', FilmesController.listarFilmes);
 
+export default routes;
