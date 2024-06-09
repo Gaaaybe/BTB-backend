@@ -6,8 +6,4 @@ const routes = (app) => {
     app.use(express.json(), filmes);
 };
 
-(async ()=>{
-    console.log('Funciona?');
-})();
-
 export default routes;

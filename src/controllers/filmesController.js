@@ -12,5 +12,51 @@ class filmesController{
     }
 }
 
+(async ()=>{
+    // try {
+    //     await db.filme.create({
+        
+    //         filmeID: 209,
+    //         titulo: "Vingadores 8",
+    //         diretor: "Christopher Nolan",
+    //         estudio: "Marvel Studios",
+    //         duracao: "09:49:00",
+    //         classInd: 75,
+    //         genero: "Filme generico",
+    //         sinopse: "Uns herois lutam contra uns vilões"
+        
+    // })
+    // } catch (error) {
+    //     console.error(error);
+    // }
+
+    // try {
+    //     await db.sala.create({
+        
+    //         filmeID: 209,
+    //         titulo: "Vingadores 8",
+    //         diretor: "Christopher Nolan",
+    //         estudio: "Marvel Studios",
+    //         duracao: "09:49:00",
+    //         classInd: 75,
+    //         genero: "Filme generico",
+    //         sinopse: "Uns herois lutam contra uns vilões"
+        
+    // })
+    // } catch (error) {
+    //     console.error(error);
+    // }
+
+    
+
+    // try {
+    //     const filmes = await db.filme.findAll();
+    //     console.log(filmes);
+    // } catch (error) {
+    //     console.error(error);
+    // }
+    console.log('Funciona?');
+})();
+
 export default filmesController;
 
