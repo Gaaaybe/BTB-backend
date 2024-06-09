@@ -16,8 +16,9 @@ export default class poltrona extends Model {
     },
     poltronaID: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      primaryKey: true
+      allowNull: true,
+      primaryKey: true,
+      defaultValue: DataTypes.DEFAULT
     },
     poltronaEstado:{
       type: DataTypes.BOOLEAN,

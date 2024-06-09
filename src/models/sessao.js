@@ -31,8 +31,9 @@ export default class sessao extends Model {
     },
     sessaoID: {
       type: DataTypes.STRING(255),
-      allowNull: false,
-      primaryKey: true
+      allowNull: true,
+      primaryKey: true,
+      defaultValue: DataTypes.DEFAULT
     }
   }, {
     sequelize,

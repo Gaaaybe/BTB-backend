@@ -26,8 +26,9 @@ export default class ingresso extends Model {
     },
     ingressoID: {
       type: DataTypes.STRING(345),
-      allowNull: false,
-      primaryKey: true
+      allowNull: true,
+      primaryKey: true,
+      defaultValue: DataTypes.DEFAULT
     }
   }, {
     sequelize,
