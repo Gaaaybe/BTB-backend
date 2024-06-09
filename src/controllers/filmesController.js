@@ -1,5 +1,5 @@
-import axios from "axios";
 import db from "../models/index.js";
+import { pegarFilmesAPI, constroiObjeto } from "../services/objectService.js";
 
 class filmesController {
     static async listarFilmes(req, res) {
@@ -14,24 +14,6 @@ class filmesController {
 
 (async () => {
 
-    try {
-        
-        const filmesLancamentos = await axios.get('https://api.themoviedb.org/3/movie/now_playing?language=pt-BR&page=1&region=BR&api_key=118db2dd95c62445f074204474d7a5c0');
-        const ids = filmesLancamentos.data.results.map(filme => filme.id);
-        async function getFilmes(ids) {
-            const resposta = await axios.get(`https://api.themoviedb.org/3/movie/${ids}?api_key=118db2dd95c62445f074204474d7a5c0&append_to_response=release_dates&language=pt-BR&region=BR`);
-            return resposta.data;
-        }
-        const filmesDetalhes = await Promise.all(ids.map(id => getFilmes(id)));
-        const filmes = filmesDetalhes.results;
-        console.log(filmesDetalhes[1]);
-        
-        const classInd = filmesDetalhes[1].release_dates.results.find(release => release.iso_3166_1 === 'US').release_dates[0].certification;
-        console.log("clasi: ",classInd);
-
-    } catch (error) {
-        console.error(error);
-    }
     // try {
     //     await db.filme.create({
 
@@ -44,38 +26,32 @@ class filmesController {
     //         genero: "Filme generico",
     //         sinopse: "Uns herois lutam contra uns vilões"
 
-    // })
+    //     })
     // } catch (error) {
     //     console.error(error);
     // }
 
-    // try {
-    //     await db.sala.create({
-
-    //         filmeID: 209,
-    //         titulo: "Vingadores 8",
-    //         diretor: "Christopher Nolan",
-    //         estudio: "Marvel Studios",
-    //         duracao: "09:49:00",
-    //         classInd: 75,
-    //         genero: "Filme generico",
-    //         sinopse: "Uns herois lutam contra uns vilões"
-
-    // })
-    // } catch (error) {
-    //     console.error(error);
-    // }
-
-
-
-    // try {
-    //     const filmes = await db.filme.findAll();
-    //     console.log(filmes);
-    // } catch (error) {
-    //     console.error(error);
-    // }
-    console.log('Funciona?');
+    //    const filmes = await pegarFilmesAPI();
+    //    console.log('Funciona:', filmes[0].id);
+    //    const filmeBuscado = await db.filme.findOne({ where: { filmeID: 209 } });
+    // await db.sala.create({
+    //     salaNum: 1,
+    //     salaCapacidadeTotal: 30,
+    //     salaCapacidadeAtual: 30
+    // });
+    //await db.poltrona.create({
+    
+    //})
+    const sessoes = await db.sessao.findAll();
+    const salas = await db.sala.findAll();
+    const filmes = await db.filme.findAll();
+    const ingressos = await db.ingresso.findAll();
+    const poltronas = await db.poltrona.findAll();
+    //await db.sala.destroy(); ""
+    console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas[0].dataValues, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
+    //   constroiObjeto(filmeBuscado);
 })();
+
 
 export default filmesController;
 
