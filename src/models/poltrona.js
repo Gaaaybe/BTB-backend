@@ -18,7 +18,13 @@ export default class poltrona extends Model {
       type: DataTypes.STRING(45),
       allowNull: false,
       primaryKey: true
+    },
+    poltronaEstado:{
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: true
     }
+
   }, {
     sequelize,
     tableName: 'poltrona',
