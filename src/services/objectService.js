@@ -10,7 +10,11 @@ async function pegarFilmesAPI() {
             const resposta = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=118db2dd95c62445f074204474d7a5c0&append_to_response=release_dates&language=pt-BR&region=BR`);
             return resposta.data;
         }));
-        return filmesDetalhes;
+        filmesDetalhes.sort((a, b) => b.popularity - a.popularity);
+
+        const filmesMaisPopulares = filmesDetalhes.slice(0, 6);
+
+        return filmesMaisPopulares;
 
     } catch (error) {
         console.error(error);
@@ -23,27 +27,27 @@ async function verificarFilme(filmeID) {
 }
 
 async function pegarAtributosApartirDeFilmeID(filmeID) {
-    try{
+    try {
         const sessao = await db.sessao.findOne({ where: { filme: filmeID } });
         const poltronasSala = await db.poltrona.findAll({ where: { sala: sessao.sala } });
         const atributos = { sessao, poltronasSala };
         return atributos;
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
-    
+
 }
 
 async function constroiObjetoPoltrona(poltrona) {
-    
-     const novaPoltrona = {
-         id: poltrona.poltronaID,
-         num: poltrona.poltronaNum,
-         estado: poltrona.poltronaEstado,
-     }
-     //console.log(novaPoltrona);
-     return novaPoltrona;
+
+    const novaPoltrona = {
+        id: poltrona.poltronaID,
+        poltronaNum: poltrona.poltronaNum,
+        estado: poltrona.poltronaEstado,
+    }
+    //console.log(novaPoltrona);
+    return novaPoltrona;
 }
 
 async function constroiObjetoHorario(sessao, poltronasSala) {
@@ -51,52 +55,117 @@ async function constroiObjetoHorario(sessao, poltronasSala) {
     //let poltronas = await constroiObjetoPoltrona(poltronasSala);
     //console.log(poltronas);
     let poltronas = [];
-    await poltronasSala.forEach(async poltrona => poltronas.push(await constroiObjetoPoltrona(poltrona)));
-    console.log(poltronas);
+
+    // Use um loop for...of para esperar cada promessa ser resolvida
+    for (let poltrona of poltronasSala) {
+        poltronas.push(await constroiObjetoPoltrona(poltrona));
+    }
+
+    //console.log(poltronas);
     const horario = {
         id: sessao.sessaoID,
-        sessao_horarios: sessao.horarioHora,
+        sessao_horario: sessao.horarioHora,
         sessao_data: sessao.horarioData,
-        poltronas: ""
+        poltronas: poltronas,
     }
     return horario;
 
 }
 
 async function constroiObjetoSala(atributos) {
-    //let horarios;
-    //horarios.forEach(horario => constroiObjetoHorario(horario, sala));
-    //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",atributos.sessao,"AAAAAAA", atributos.poltronasSala,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    let horarios = await constroiObjetoHorario(atributos.sessao, atributos.poltronasSala);
-    //console.log(atributos.poltronasSala)
-    console.log(horarios);
-    const novaSala = {
-        id: atributos.poltronasSala.salaNum,
-        horarios: '',
-    }
-    return novaSala;
+    let horarios;
+    if (Array.isArray(atributos)) {
 
+        horarios = [];
+        for (let atributo of atributos) {
+            let horario = await constroiObjetoHorario(atributo.sessao, atributo.poltronasSala);
+            horarios.push(horario);
+        }
+    } else {
+        horarios = await constroiObjetoHorario(atributos.sessao, atributos.poltronasSala);
+    }
+
+    const novaSala = {
+        salaNum: atributos.sessao.sala,
+        horarios: Array.isArray(atributos) ? horarios : [horarios],
+    };
+    return novaSala;
 }
 
 async function constroiObjetoFilme(objeto) {
-
-    if (verificarFilme(objeto.filmeID)) {
+    const filmeID = objeto.filmeID || objeto.id;
+    
+    if (await verificarFilme(filmeID)) {
         const atributos = await pegarAtributosApartirDeFilmeID(objeto.filmeID);
-        let sala = constroiObjetoSala(atributos);
-        console.log(atributos.sessao.dataValues);
-        //console.log(sala);
-        //console.log(objeto);
+        let salas = [];
+        if (Array.isArray(atributos)) {
+            for (let atributo of atributos) {
+                let sala = await constroiObjetoSala(atributo);
+                salas.push(...sala);
+            }
+        } else {
+            let sala = await constroiObjetoSala(atributos);
+            salas.push(sala);
+        }
         try {
             const novoObjeto = {
                 id: objeto.filmeID,
                 titulo: objeto.titulo,
                 sinopse: objeto.sinopse,
-                salas: '',
+                salas: salas,
             }
-            console.log(novoObjeto);
+            return novoObjeto;
         } catch (error) {
             console.error(error);
         }
+
+    } else {
+        const poltronas = Array.from({ length: 30 }, (_, index) => ({
+            poltronaNum: index + 1,
+            estado: true
+        }));
+        const salas = [
+            {
+                salaNum: 1,
+                horarios: [
+                    {
+                        sessao_horario: '12:15:00',
+                        sessao_data: '2024-12-13',
+                        poltronas: poltronas,
+
+                    },
+                    {
+                        sessao_horario: '14:15:00',
+                        sessao_data: '2024-12-14',
+                        poltronas: poltronas,
+                    },
+                ]
+            },
+            {
+                salaNum: 2,
+                horarios: [
+                    {
+                        sessao_horario: '16:15:00',
+                        sessao_data: '2024-12-13',
+                        poltronas: poltronas,
+                    },
+                    {
+                        sessao_horario: '18:15:00',
+                        sessao_data: '2024-12-14',
+                        poltronas: poltronas,
+                    }
+                ]
+            }
+        ]
+        const novoObjeto = {
+            id: objeto.id,
+            titulo: objeto.title,
+            sinopse: objeto.overview,
+            imagem: `https://image.tmdb.org/t/p/original/${objeto.poster_path}`,
+            salas: salas,
+        };
+        return novoObjeto;
+
     }
 }
 // const filmes = filmesDetalhes.results;
