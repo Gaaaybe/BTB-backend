@@ -37,34 +37,38 @@ async function pegarAtributosApartirDeFilmeID(filmeID) {
 
 async function constroiObjetoPoltrona(poltrona) {
     
-//     const novaPoltrona = {
-//         id: poltrona.poltronaID,
-//         num: poltrona.poltronaNum,
-//         estado: poltrona.poltronaEstado,
-//     }
-//     return novaPoltrona;
+     const novaPoltrona = {
+         id: poltrona.poltronaID,
+         num: poltrona.poltronaNum,
+         estado: poltrona.poltronaEstado,
+     }
+     //console.log(novaPoltrona);
+     return novaPoltrona;
 }
 
-async function constroiObjetoHorario(sessao, sala) {
-    //let poltronas = constroiObjetoPoltrona(sala.poltrona);
+async function constroiObjetoHorario(sessao, poltronasSala) {
+    //console.log(poltronasSala.poltrona)
+    //let poltronas = await constroiObjetoPoltrona(poltronasSala);
     //console.log(poltronas);
-    //poltronas.forEach(poltrona => constroiObjetoPoltrona(poltrona));
-
-    //const horario = {
-    //    id: sessao.sessaoID,
-    //    sessao_horarios: sessao.horarioHora,
-    //    sessao_data: sessao.horarioData,
-    //    poltronas: ""
-    //}
-    //return horario;
+    let poltronas = [];
+    await poltronasSala.forEach(async poltrona => poltronas.push(await constroiObjetoPoltrona(poltrona)));
+    console.log(poltronas);
+    const horario = {
+        id: sessao.sessaoID,
+        sessao_horarios: sessao.horarioHora,
+        sessao_data: sessao.horarioData,
+        poltronas: ""
+    }
+    return horario;
 
 }
 
 async function constroiObjetoSala(atributos) {
     //let horarios;
     //horarios.forEach(horario => constroiObjetoHorario(horario, sala));
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",atributos.sessao,"AAAAAAA", atributos.poltronasSala,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    let horarios = constroiObjetoHorario(atributos.sessao, atributos.poltronasSala);
+    //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",atributos.sessao,"AAAAAAA", atributos.poltronasSala,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    let horarios = await constroiObjetoHorario(atributos.sessao, atributos.poltronasSala);
+    //console.log(atributos.poltronasSala)
     console.log(horarios);
     const novaSala = {
         id: atributos.poltronasSala.salaNum,
@@ -79,9 +83,9 @@ async function constroiObjetoFilme(objeto) {
     if (verificarFilme(objeto.filmeID)) {
         const atributos = await pegarAtributosApartirDeFilmeID(objeto.filmeID);
         let sala = constroiObjetoSala(atributos);
-        console.log(atributos);
-        console.log(sala);
-        console.log(objeto);
+        console.log(atributos.sessao.dataValues);
+        //console.log(sala);
+        //console.log(objeto);
         try {
             const novoObjeto = {
                 id: objeto.filmeID,
