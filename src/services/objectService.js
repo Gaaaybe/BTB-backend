@@ -23,6 +23,7 @@ async function verificarFilme(filmeID) {
 }
 
 async function constroiObjeto(objeto) {
+
     console.log(objeto);
     try {
         const novoObjeto = {

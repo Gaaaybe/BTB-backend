@@ -39,17 +39,35 @@ class filmesController {
     //     salaCapacidadeTotal: 30,
     //     salaCapacidadeAtual: 30
     // });
-    //await db.poltrona.create({
-    
-    //})
+    const poltronas = await db.poltrona.findAll();
+    // console.log(poltronas);
+    // for (let i = 1; i <= 5; i++) {
+    //     await db.poltrona.create({
+    //         sala: 1,
+    //         poltronaNum: i
+    //     })
+    // }
     const sessoes = await db.sessao.findAll();
     const salas = await db.sala.findAll();
     const filmes = await db.filme.findAll();
     const ingressos = await db.ingresso.findAll();
-    const poltronas = await db.poltrona.findAll();
-    //await db.sala.destroy(); ""
-    console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas[0].dataValues, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
+    // for (let i = 1; i <= 30; i++) {
+    //     await db.poltrona.destroy({ where: { poltronaNum: i } });
+    // }
+    //await db.sala.destroy({ where: { salaNum: 2 } }); ""
+    console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
     //   constroiObjeto(filmeBuscado);
+    // await db.sessao.create({
+    //     sala: 1,
+    //     filme: 2,
+    //     horarioData: "2021-09-01",
+    //     horarioHora: "09:00:00"
+    // })
+    const sessaes = await db.sessao.findOne({ where: { filme: 2 }});
+    console.log(sessaes.sala);
+    const poltronasSala = await db.poltrona.findAll({ where: { sala: sessaes.sala } });
+    console.log(poltronasSala);
+
 })();
 
 
