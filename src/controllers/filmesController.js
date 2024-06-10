@@ -1,11 +1,16 @@
 import db from "../models/index.js";
-import { pegarFilmesAPI, constroiObjetoFilme, pegarAtributosApartirDeFilmeID, constroiObjetoPoltrona } from "../services/objectService.js";
+import { pegarFilmesAPI, verificarFilme, constroiObjetoFilme, pegarAtributosApartirDeFilmeID, constroiObjetoPoltrona } from "../services/objectService.js";
 
 class filmesController {
     static async listarFilmes(req, res) {
         try {
-            const filmes = await db.filme.findAll();
-            return res.status(200).json(filmes);
+            const filmesAPI = await pegarFilmesAPI();
+            const objFilmes = [];
+            for (const filme of filmesAPI) {
+                const objFilme = await constroiObjetoFilme(filme);
+                objFilmes.push(objFilme);
+            }
+            return res.status(200).json(objFilmes);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -31,15 +36,15 @@ class filmesController {
     //     console.error(error);
     // }
 
-    //    const filmes = await pegarFilmesAPI();
-    //    console.log('Funciona:', filmes[0].id);
+        //const filmesAPI = await pegarFilmesAPI();
+        //console.log('Funciona:', filmesAPI);
     //    const filmeBuscado = await db.filme.findOne({ where: { filmeID: 209 } });
     // await db.sala.create({
     //     salaNum: 1,
     //     salaCapacidadeTotal: 30,
     //     salaCapacidadeAtual: 30
     // });
-    const poltronas = await db.poltrona.findAll();
+    //const poltronas = await db.poltrona.findAll();
     // console.log(poltronas);
     // for (let i = 1; i <= 5; i++) {
     //     await db.poltrona.create({
@@ -47,10 +52,10 @@ class filmesController {
     //         poltronaNum: i
     //     })
     // }
-    const sessoes = await db.sessao.findAll();
-    const salas = await db.sala.findAll();
-    const filmes = await db.filme.findAll();
-    const ingressos = await db.ingresso.findAll();
+    //const sessoes = await db.sessao.findAll();
+    //const salas = await db.sala.findAll();
+    //const filmes = await db.filme.findAll();
+    //const ingressos = await db.ingresso.findAll();
     // for (let i = 1; i <= 30; i++) {
     //     await db.poltrona.destroy({ where: { poltronaNum: i } });
     // }
@@ -58,7 +63,10 @@ class filmesController {
     //pegarAtributosApartirDeFilmeID(2);
     //console.log("Filmes:", filmes[0]);
     
-    await constroiObjetoFilme(filmes[1]);
+    //const objFormoso = await constroiObjetoFilme(filmesAPI[0]);
+    //console.log(objFormoso);
+    //console.log(objFormoso.salas[0])
+    //console.log(objFormoso.salas[0].horarios[0].poltronas);
    // console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
     //   constroiObjeto(filmeBuscado);
     // await db.sessao.create({
