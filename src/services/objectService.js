@@ -22,19 +22,77 @@ async function verificarFilme(filmeID) {
     return !!filmeBuscado;
 }
 
-async function constroiObjeto(objeto) {
+async function pegarAtributosApartirDeFilmeID(filmeID) {
+    try{
+        const sessao = await db.sessao.findOne({ where: { filme: filmeID } });
+        const poltronasSala = await db.poltrona.findAll({ where: { sala: sessao.sala } });
+        const atributos = { sessao, poltronasSala };
+        return atributos;
 
-    console.log(objeto);
-    try {
-        const novoObjeto = {
-            id: objeto.filmeID,
-            titulo: objeto.titulo,
-            sinopse: objeto.sinopse,
-            sala: '',
-        }
-        console.log(novoObjeto);
-    } catch (error) {
+    }catch(error){
         console.error(error);
+    }
+    
+}
+
+async function constroiObjetoPoltrona(poltrona) {
+    
+//     const novaPoltrona = {
+//         id: poltrona.poltronaID,
+//         num: poltrona.poltronaNum,
+//         estado: poltrona.poltronaEstado,
+//     }
+//     return novaPoltrona;
+}
+
+async function constroiObjetoHorario(sessao, sala) {
+    //let poltronas = constroiObjetoPoltrona(sala.poltrona);
+    //console.log(poltronas);
+    //poltronas.forEach(poltrona => constroiObjetoPoltrona(poltrona));
+
+    //const horario = {
+    //    id: sessao.sessaoID,
+    //    sessao_horarios: sessao.horarioHora,
+    //    sessao_data: sessao.horarioData,
+    //    poltronas: ""
+    //}
+    //return horario;
+
+}
+
+async function constroiObjetoSala(atributos) {
+    //let horarios;
+    //horarios.forEach(horario => constroiObjetoHorario(horario, sala));
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",atributos.sessao,"AAAAAAA", atributos.poltronasSala,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    let horarios = constroiObjetoHorario(atributos.sessao, atributos.poltronasSala);
+    console.log(horarios);
+    const novaSala = {
+        id: atributos.poltronasSala.salaNum,
+        horarios: '',
+    }
+    return novaSala;
+
+}
+
+async function constroiObjetoFilme(objeto) {
+
+    if (verificarFilme(objeto.filmeID)) {
+        const atributos = await pegarAtributosApartirDeFilmeID(objeto.filmeID);
+        let sala = constroiObjetoSala(atributos);
+        console.log(atributos);
+        console.log(sala);
+        console.log(objeto);
+        try {
+            const novoObjeto = {
+                id: objeto.filmeID,
+                titulo: objeto.titulo,
+                sinopse: objeto.sinopse,
+                salas: '',
+            }
+            console.log(novoObjeto);
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 // const filmes = filmesDetalhes.results;
@@ -85,4 +143,4 @@ async function constroiObjeto(objeto) {
 //     console.error(error);
 // }
 
-export { pegarFilmesAPI, verificarFilme, constroiObjeto };
+export { pegarFilmesAPI, verificarFilme, constroiObjetoFilme, pegarAtributosApartirDeFilmeID, constroiObjetoPoltrona };

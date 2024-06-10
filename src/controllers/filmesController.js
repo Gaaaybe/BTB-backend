@@ -1,5 +1,5 @@
 import db from "../models/index.js";
-import { pegarFilmesAPI, constroiObjeto } from "../services/objectService.js";
+import { pegarFilmesAPI, constroiObjetoFilme, pegarAtributosApartirDeFilmeID, constroiObjetoPoltrona } from "../services/objectService.js";
 
 class filmesController {
     static async listarFilmes(req, res) {
@@ -55,7 +55,11 @@ class filmesController {
     //     await db.poltrona.destroy({ where: { poltronaNum: i } });
     // }
     //await db.sala.destroy({ where: { salaNum: 2 } }); ""
-    console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
+    //pegarAtributosApartirDeFilmeID(2);
+    //console.log("Filmes:", filmes[0]);
+    
+    await constroiObjetoFilme(filmes[1]);
+   // console.log("Sessoes:", sessoes[0].dataValues, "\nSalas:", salas, "\nFilmes:", filmes[0].dataValues, "\nIngressos:", ingressos, "\nPoltronas:", poltronas[0].dataValues);
     //   constroiObjeto(filmeBuscado);
     // await db.sessao.create({
     //     sala: 1,
@@ -63,10 +67,7 @@ class filmesController {
     //     horarioData: "2021-09-01",
     //     horarioHora: "09:00:00"
     // })
-    const sessaes = await db.sessao.findOne({ where: { filme: 2 }});
-    console.log(sessaes.sala);
-    const poltronasSala = await db.poltrona.findAll({ where: { sala: sessaes.sala } });
-    console.log(poltronasSala);
+
 
 })();
 
