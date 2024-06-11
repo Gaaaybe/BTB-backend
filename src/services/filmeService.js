@@ -87,6 +87,8 @@ async function constroiObjetoFilme(objeto) {
     const filmeID = objeto.filmeID || objeto.id;
     
     if (await verificarFilme(filmeID)) {
+        const resposta = await axios.get(`https://api.themoviedb.org/3/movie/${objeto.filmeID}?api_key=118db2dd95c62445f074204474d7a5c0&append_to_response=release_dates&language=pt-BR&region=BR`);
+        const imagem_path = resposta.data.poster_path;
         const atributos = await pegarAtributosApartirDeFilmeID(objeto.filmeID);
         let salas = [];
         if (Array.isArray(atributos)) {
@@ -103,6 +105,7 @@ async function constroiObjetoFilme(objeto) {
                 id: objeto.filmeID,
                 titulo: objeto.titulo,
                 sinopse: objeto.sinopse,
+                imagem: `https://image.tmdb.org/t/p/original/${imagem_path}`,
                 salas: salas,
             }
             return novoObjeto;
