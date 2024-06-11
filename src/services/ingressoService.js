@@ -1,6 +1,7 @@
 import axios from "axios";
 import db from "../models/index.js";
 
+
 async function verificarFilme(filmeID) {
     const filmeBuscado = await db.Filme.findOne({ where: { filmeID: filmeID } });
     return !!filmeBuscado;
@@ -16,4 +17,14 @@ async function verificarSala(salaID) {
     return !!salaBuscada;
 }
 
-export { verificarFilme, verificarSessao, verificarSala}
+async function criarPoltronas(salaID, quantidade) {
+    const poltronas = Array.from({ length: quantidade }, (_, index) => ({
+        poltronaNum: index + 1,
+        estado: true,
+        salaID: salaID
+    }));
+
+    await db.Poltrona.bulkCreate(poltronas);
+}
+
+export { verificarFilme, verificarSessao, verificarSala, criarPoltronas }
