@@ -11,11 +11,8 @@ async function pegarFilmesAPI() {
             return resposta.data;
         }));
         filmesDetalhes.sort((a, b) => b.popularity - a.popularity);
-
         const filmesMaisPopulares = filmesDetalhes.slice(0, 6);
-
         return filmesMaisPopulares;
-
     } catch (error) {
         console.error(error);
     }
@@ -46,22 +43,16 @@ async function constroiObjetoPoltrona(poltrona) {
         poltronaNum: poltrona.poltronaNum,
         estado: poltrona.poltronaEstado,
     }
-    //console.log(novaPoltrona);
     return novaPoltrona;
 }
 
 async function constroiObjetoHorario(sessao, poltronasSala) {
-    //console.log(poltronasSala.poltrona)
-    //let poltronas = await constroiObjetoPoltrona(poltronasSala);
-    //console.log(poltronas);
     let poltronas = [];
 
-    // Use um loop for...of para esperar cada promessa ser resolvida
     for (let poltrona of poltronasSala) {
         poltronas.push(await constroiObjetoPoltrona(poltrona));
     }
 
-    //console.log(poltronas);
     const horario = {
         id: sessao.sessaoID,
         sessao_horario: sessao.horarioHora,
@@ -168,52 +159,5 @@ async function constroiObjetoFilme(objeto) {
 
     }
 }
-// const filmes = filmesDetalhes.results;
-// console.log(filmesDetalhes[1]);
-
-// const classInd = filmesDetalhes[1].release_dates.results.find(release => release.iso_3166_1 === 'US').release_dates[0].certification;
-// console.log("clasi: ",classInd);
-// try {
-//     await db.filme.create({
-
-//         filmeID: 209,
-//         titulo: "Vingadores 8",
-//         diretor: "Christopher Nolan",
-//         estudio: "Marvel Studios",
-//         duracao: "09:49:00",
-//         classInd: 75,
-//         genero: "Filme generico",
-//         sinopse: "Uns herois lutam contra uns vilões"
-
-// })
-// } catch (error) {
-//     console.error(error);
-// }
-
-// try {
-//     await db.sala.create({
-
-//         filmeID: 209,
-//         titulo: "Vingadores 8",
-//         diretor: "Christopher Nolan",
-//         estudio: "Marvel Studios",
-//         duracao: "09:49:00",
-//         classInd: 75,
-//         genero: "Filme generico",
-//         sinopse: "Uns herois lutam contra uns vilões"
-
-// })
-// } catch (error) {
-//     console.error(error);
-// }
-
-
-
-// try {
-//     const filmes = await db.filme.findAll();
-//     console.log(filmes);
-// } catch (error) {
-//     console.error(error);
-// }
 
 export { pegarFilmesAPI, verificarFilme, constroiObjetoFilme, pegarAtributosApartirDeFilmeID, constroiObjetoPoltrona };
